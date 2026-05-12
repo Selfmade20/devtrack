@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../services/auth.service';
 import { useAuth } from '../context/AuthContext';
+import logo from '../assets/devtrack.svg';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -37,9 +38,9 @@ const Register = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center text-blue-600 mb-6">
-          DevTrack 🚀
-        </h1>
+      <div className="flex justify-center mb-6">
+      <img src={logo} alt="DevTrack" className="h-20" />
+      </div>
         <h2 className="text-xl font-semibold text-gray-700 mb-4">
           Create an account
         </h2>
