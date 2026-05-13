@@ -10,7 +10,7 @@ import AddApplicationForm from '../components/AddApplicationForm';
 import ApplicationCard from '../components/ApplicationCard';
 import type { Application } from '../types';
 import logo from '../assets/devtrack.svg';
-
+import KanbanBoard from '../components/KanbanBoard';
 
 
 const Dashboard = () => {
@@ -119,24 +119,19 @@ const Dashboard = () => {
 
         {/* Applications Grid */}
         {loading ? (
-          <div className="text-center text-gray-500 py-20">Loading...</div>
-        ) : applications.length === 0 ? (
-          <div className="text-center text-gray-400 py-20">
-            <p className="text-lg">No applications yet</p>
-            <p className="text-sm mt-2">Click "Add Application" to get started</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {applications.map((app) => (
-              <ApplicationCard
-                key={app.id}
-                application={app}
-                onDelete={handleDelete}
-                onStatusChange={handleStatusChange}
-              />
-            ))}
-          </div>
-        )}
+  <div className="text-center text-gray-500 py-20">Loading...</div>
+) : applications.length === 0 ? (
+  <div className="text-center text-gray-400 py-20">
+    <p className="text-lg">No applications yet</p>
+    <p className="text-sm mt-2">Click "Add Application" to get started</p>
+  </div>
+) : (
+  <KanbanBoard
+    applications={applications}
+    onDelete={handleDelete}
+    onStatusChange={handleStatusChange}
+  />
+)}
       </div>
 
       {/* Add Application Modal */}

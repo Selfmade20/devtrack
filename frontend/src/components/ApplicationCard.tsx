@@ -4,6 +4,7 @@ interface Props {
   application: Application;
   onDelete: (id: string) => void;
   onStatusChange: (id: string, status: string) => void;
+  hideStatusDropdown?: boolean;
 }
 
 const statusColors: Record<string, string> = {
@@ -13,7 +14,12 @@ const statusColors: Record<string, string> = {
   rejected: 'bg-red-100 text-red-700',
 };
 
-const ApplicationCard = ({ application, onDelete, onStatusChange }: Props) => {
+const ApplicationCard = ({
+  application,
+  onDelete,
+  onStatusChange,
+  hideStatusDropdown,
+}: Props) => {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition">
       <div className="flex justify-between items-start mb-3">
@@ -42,16 +48,18 @@ const ApplicationCard = ({ application, onDelete, onStatusChange }: Props) => {
       </p>
 
       <div className="flex gap-2">
-        <select
-          value={application.status}
-          onChange={(e) => onStatusChange(application.id, e.target.value)}
-          className="flex-1 text-sm border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="applied">Applied</option>
-          <option value="interview">Interview</option>
-          <option value="offer">Offer</option>
-          <option value="rejected">Rejected</option>
-        </select>
+        {!hideStatusDropdown && (
+          <select
+            value={application.status}
+            onChange={(e) => onStatusChange(application.id, e.target.value)}
+            className="flex-1 text-sm border border-gray-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="applied">Applied</option>
+            <option value="interview">Interview</option>
+            <option value="offer">Offer</option>
+            <option value="rejected">Rejected</option>
+          </select>
+        )}
 
         <button
           onClick={() => onDelete(application.id)}
