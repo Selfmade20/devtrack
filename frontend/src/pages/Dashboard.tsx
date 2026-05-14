@@ -7,11 +7,10 @@ import {
   updateApplication,
 } from '../services/applications.service';
 import AddApplicationForm from '../components/AddApplicationForm';
-import ApplicationCard from '../components/ApplicationCard';
+import StatsChart from '../components/StatsChart';
+import KanbanBoard from '../components/KanbanBoard';
 import type { Application } from '../types';
 import logo from '../assets/devtrack.svg';
-import KanbanBoard from '../components/KanbanBoard';
-
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -19,6 +18,7 @@ const Dashboard = () => {
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [view, setView] = useState<'kanban' | 'stats'>('kanban');
 
   useEffect(() => {
     fetchApplications();
@@ -54,7 +54,9 @@ const Dashboard = () => {
       await updateApplication(id, { status });
       setApplications(
         applications.map((app) =>
-          app.id === id ? { ...app, status: status as Application['status'] } : app
+          app.id === id
+            ? { ...app, status: status as Application['status'] }
+            : app
         )
       );
     } catch {
@@ -71,9 +73,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Navbar */}
       <nav className="bg-white shadow-sm px-8 py-4 flex justify-between items-center">
-      <div className="flex justify-center mb-6">
-     <img src={logo} alt="DevTrack" className="h-20" />
-      </div>
+        <img src={logo} alt="DevTrack" className="h-10" />
         <div className="flex items-center gap-4">
           <span className="text-gray-600 text-sm">Hey, {user?.name}!</span>
           <button
@@ -85,7 +85,8 @@ const Dashboard = () => {
         </div>
       </nav>
 
-      <div className="max-w-5xl mx-auto px-8 py-8">
+      {/* Main content */}
+      <div className="max-w-7xl mx-auto px-8 py-8">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
@@ -97,18 +98,46 @@ const Dashboard = () => {
               {applications.length !== 1 ? 's' : ''} tracked
             </p>
           </div>
-          <button
-            onClick={() => setShowForm(true)}
-            className="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
-          >
-            + Add Application
-          </button>
+          <div className="flex items-center gap-3">
+            {/* View toggle */}
+            <div className="flex bg-gray-100 rounded-lg p-1">
+              <button
+                onClick={() => setView('kanban')}
+                className={`px-4 py-1.5 rounded-md text-sm font-medium transition ${
+                  view === 'kanban'
+                    ? 'bg-white text-gray-800 shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Board
+              </button>
+              <button
+                onClick={() => setView('stats')}
+                className={`px-4 py-1.5 rounded-md text-sm font-medium transition ${
+                  view === 'stats'
+                    ? 'bg-white text-gray-800 shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Stats
+              </button>
+            </div>
+            <button
+              onClick={() => setShowForm(true)}
+              className="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+            >
+              + Add Application
+            </button>
+          </div>
         </div>
 
-        {/* Stats */}
+        {/* Stats cards */}
         <div className="grid grid-cols-4 gap-4 mb-8">
           {['applied', 'interview', 'offer', 'rejected'].map((status) => (
-            <div key={status} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+            <div
+              key={status}
+              className="bg-white rounded-xl p-4 shadow-sm border border-gray-100"
+            >
               <p className="text-gray-500 text-sm capitalize">{status}</p>
               <p className="text-2xl font-bold text-gray-800 mt-1">
                 {applications.filter((a) => a.status === status).length}
@@ -117,21 +146,25 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* Applications Grid */}
+        {/* Content */}
         {loading ? (
-  <div className="text-center text-gray-500 py-20">Loading...</div>
-) : applications.length === 0 ? (
-  <div className="text-center text-gray-400 py-20">
-    <p className="text-lg">No applications yet</p>
-    <p className="text-sm mt-2">Click "Add Application" to get started</p>
-  </div>
-) : (
-  <KanbanBoard
-    applications={applications}
-    onDelete={handleDelete}
-    onStatusChange={handleStatusChange}
-  />
-)}
+          <div className="text-center text-gray-500 py-20">Loading...</div>
+        ) : applications.length === 0 ? (
+          <div className="text-center text-gray-400 py-20">
+            <p className="text-lg">No applications yet</p>
+            <p className="text-sm mt-2">
+              Click "Add Application" to get started
+            </p>
+          </div>
+        ) : view === 'stats' ? (
+          <StatsChart applications={applications} />
+        ) : (
+          <KanbanBoard
+            applications={applications}
+            onDelete={handleDelete}
+            onStatusChange={handleStatusChange}
+          />
+        )}
       </div>
 
       {/* Add Application Modal */}
