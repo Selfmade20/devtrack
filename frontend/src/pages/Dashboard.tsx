@@ -11,6 +11,7 @@ import StatsChart from '../components/StatsChart';
 import KanbanBoard from '../components/KanbanBoard';
 import type { Application } from '../types';
 import logo from '../assets/devtrack.svg';
+import { LogOut, Plus } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, logout } = useAuth();
@@ -71,80 +72,84 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Navbar */}
-      <nav className="bg-white shadow-sm px-8 py-4 flex justify-between items-center">
-        <img src={logo} alt="DevTrack" className="h-10" />
-        <div className="flex items-center gap-4">
-          <span className="text-gray-600 text-sm">Hey, {user?.name}!</span>
-          <button
-            onClick={handleLogout}
-            className="text-sm bg-red-50 text-red-600 px-4 py-2 rounded-lg hover:bg-red-100 transition"
-          >
-            Logout
-          </button>
-        </div>
-      </nav>
+     {/* Navbar */}
+<nav className="bg-white shadow-sm px-4 md:px-8 py-4 flex justify-between items-center sticky top-0 z-10">
+  <img src={logo} alt="DevTrack" className="h-8 md:h-10" />
+  <div className="flex items-center gap-2 md:gap-4">
+    <span className="text-gray-600 text-sm hidden md:block">
+      Hey, {user?.name}!
+    </span>
+    <button
+  onClick={handleLogout}
+  className="flex items-center gap-2 text-sm bg-red-50 text-red-600 px-3 md:px-4 py-2 rounded-lg hover:bg-red-100 transition"
+>
+  <LogOut size={14} />
+  <span className="hidden md:block">Logout</span>
+</button>
+  </div>
+</nav>
 
       {/* Main content */}
       <div className="max-w-7xl mx-auto px-8 py-8">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800">
-              My Applications
-            </h2>
-            <p className="text-gray-500 text-sm mt-1">
-              {applications.length} application
-              {applications.length !== 1 ? 's' : ''} tracked
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            {/* View toggle */}
-            <div className="flex bg-gray-100 rounded-lg p-1">
-              <button
-                onClick={() => setView('kanban')}
-                className={`px-4 py-1.5 rounded-md text-sm font-medium transition ${
-                  view === 'kanban'
-                    ? 'bg-white text-gray-800 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                Board
-              </button>
-              <button
-                onClick={() => setView('stats')}
-                className={`px-4 py-1.5 rounded-md text-sm font-medium transition ${
-                  view === 'stats'
-                    ? 'bg-white text-gray-800 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                Stats
-              </button>
-            </div>
-            <button
-              onClick={() => setShowForm(true)}
-              className="bg-blue-600 text-white px-5 py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
-            >
-              + Add Application
-            </button>
-          </div>
-        </div>
+      {/* Header */}
+<div className="flex flex-col gap-4 mb-6 md:flex-row md:justify-between md:items-center">
+  <div>
+    <h2 className="text-2xl font-bold text-gray-800">
+      My Applications
+    </h2>
+    <p className="text-gray-500 text-sm mt-1">
+      {applications.length} application
+      {applications.length !== 1 ? 's' : ''} tracked
+    </p>
+  </div>
+  <div className="flex items-center gap-3">
+    <div className="flex bg-gray-100 rounded-lg p-1 border border-gray-200">
+    <button
+  onClick={() => setView('kanban')}
+  className={`px-4 py-1.5 rounded-md text-sm font-medium transition ${
+    view === 'kanban'
+      ? 'bg-white text-blue-600 shadow-sm font-semibold'
+      : 'text-gray-500 hover:text-gray-700'
+  }`}
+>
+  Board
+</button>
+<button
+  onClick={() => setView('stats')}
+  className={`px-4 py-1.5 rounded-md text-sm font-medium transition ${
+    view === 'stats'
+      ? 'bg-white text-blue-600 shadow-sm font-semibold'
+      : 'text-gray-500 hover:text-gray-700'
+  }`}
+>
+  Stats
+</button>
+    </div>
+    <button
+  onClick={() => setShowForm(true)}
+  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition text-sm"
+>
+  <Plus size={16} />
+  <span className="hidden md:block">Add Application</span>
+  <span className="md:hidden">Add</span>
+</button>
+  </div>
+</div>
 
         {/* Stats cards */}
-        <div className="grid grid-cols-4 gap-4 mb-8">
-          {['applied', 'interview', 'offer', 'rejected'].map((status) => (
-            <div
-              key={status}
-              className="bg-white rounded-xl p-4 shadow-sm border border-gray-100"
-            >
-              <p className="text-gray-500 text-sm capitalize">{status}</p>
-              <p className="text-2xl font-bold text-gray-800 mt-1">
-                {applications.filter((a) => a.status === status).length}
-              </p>
-            </div>
-          ))}
-        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8">
+  {['applied', 'interview', 'offer', 'rejected'].map((status) => (
+    <div
+      key={status}
+      className="bg-white rounded-xl p-4 shadow-sm border border-gray-100"
+    >
+      <p className="text-gray-500 text-xs capitalize">{status}</p>
+      <p className="text-2xl font-bold text-gray-800 mt-1">
+        {applications.filter((a) => a.status === status).length}
+      </p>
+    </div>
+  ))}
+</div>
 
         {/* Content */}
         {loading ? (

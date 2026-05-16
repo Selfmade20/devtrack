@@ -37,7 +37,7 @@ const KanbanBoard = ({ applications, onDelete, onStatusChange }: Props) => {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="flex gap-4 overflow-x-auto pb-4">
+      <div className="flex flex-col gap-4 md:flex-row md:overflow-x-auto pb-4">
         {columns.map((col) => (
           <KanbanColumn
             key={col.status}

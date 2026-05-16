@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { createApplication } from '../services/applications.service';
 import type { Application } from '../types';
+import { X, AlertCircle } from 'lucide-react';
 
 interface Props {
   onAdd: (application: Application) => void;
@@ -41,15 +42,24 @@ const AddApplicationForm = ({ onAdd, onClose }: Props) => {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
-        <h2 className="text-xl font-bold text-gray-700 mb-6">
-          Add Application
-        </h2>
+      <div className="flex justify-between items-center mb-6">
+  <h2 className="text-xl font-bold text-gray-700">
+    Add Application
+  </h2>
+  <button
+    onClick={onClose}
+    className="text-gray-400 hover:text-gray-600 transition"
+  >
+    <X size={20} />
+  </button>
+</div>
 
-        {error && (
-          <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm">
-            {error}
-          </div>
-        )}
+{error && (
+  <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm flex items-center gap-2">
+    <AlertCircle size={16} />
+    {error}
+  </div>
+)}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
