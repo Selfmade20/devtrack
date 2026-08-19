@@ -4,7 +4,7 @@ A full-stack job application tracker built to help developers manage their job s
 
 **Live Demo:** [devtrack-five-lake.vercel.app](https://devtrack-five-lake.vercel.app)
 
-![DevTrack Dashboard](https://i.imgur.com/placeholder.png)
+![DevTrack Dashboard](https://imgur.com/a/kUizVaR, https://imgur.com/a/EO6t8vC)
 
 ---
 
